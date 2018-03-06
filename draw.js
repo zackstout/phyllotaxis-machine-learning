@@ -81,7 +81,17 @@ function Ellipse(rx, ry, a) {
     this.centery = height/2 - Math.sin(this.a) * this.ry;
 
     var d = dist(x, y, this.centerx, this.centery);
-    console.log(d);
+
+    var m = (mouseY - this.centery) / (mouseX - this.centerx);
+    var angle = Math.atan(m);
+    var realAngle;
+    if (mouseX > this.centerx) {
+      realAngle = (2*PI - angle) % (2*PI);
+    } else {
+      realAngle = (PI - angle);
+    }
+
+    console.log(realAngle);
     // push();
     // translate(width/2, height/2);
     // rotate(2 * PI - this.a);
