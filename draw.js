@@ -51,6 +51,26 @@ function draw() {
   // e.grow();
 }
 
+
+// from stackoverflow, wow and it works!:
+function dec2bin(dec){
+    return (dec >>> 0).toString(2);
+}
+
+
+
+function Plant(angsArray) {
+
+  this.getDna = function() {
+    angsArray.forEach(function(ang) {
+      // num between 0 and 63:
+      var a = ang.toFixed(1) * 10;
+
+    });
+  };
+}
+
+// Gotta break this down:
 function Ellipse(rx, ry, a) {
   // this.x = x;
   // this.y = y;
@@ -92,10 +112,35 @@ function Ellipse(rx, ry, a) {
     var realerAngle = (realAngle + this.a + PI/2) % (2*PI);
     // console.log(realerAngle);
 
+    // These are relative to CEnter of Ellipse, orientation (X positive toward center of canvas);
+    // We're almost there..!
     var pointOnEllipseX = this.rx * Math.cos(realerAngle);
     var pointOnEllipseY = this.ry * Math.sin(realerAngle);
 
+    var realX = pointOnEllipseX;
+
     console.log(pointOnEllipseX, pointOnEllipseY);
+  };
+
+  // This is pretty costly, but we'll only have to run it once for each individual plant, once it's reached maturity:
+  this.getArea = function() {
+    var vals = [];
+
+    for (var i=0; i < width; i++) {
+      for (var j=0; j < height; j++) {
+        vals[i * width + j] = 0;
+        // is the linter warning meaningful? does it matter if we make this inner or outer?
+        for (var k=0; k < ellipses.length; k++) {
+          var ell = ellipses[k];
+          if (ell.includes(i, j)) {
+            vals[i * width + j] = 1;
+            // will break work in a forEach? Nope!
+            break;
+          }
+        }
+      }
+    }
+
   };
 
   this.checkState = function() {
