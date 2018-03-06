@@ -57,17 +57,25 @@ function dec2bin(dec){
     return (dec >>> 0).toString(2);
 }
 
-
+var plant = new Plant([1, 2, 3, 4, 5, 5, 4, 3, 2]);
 
 function Plant(angsArray) {
+
+  var genes = [];
 
   this.getDna = function() {
     angsArray.forEach(function(ang) {
       // num between 0 and 63:
       var a = ang.toFixed(1) * 10;
-
+      var bin = dec2bin(a);
+      genes.push(bin);
     });
+
+    var dna = genes.join('');
+    return dna;
+
   };
+
 }
 
 // Gotta break this down:
