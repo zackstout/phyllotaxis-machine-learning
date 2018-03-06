@@ -74,9 +74,6 @@ function Ellipse(rx, ry, a) {
 
   // I was thinking the radial idea... But hang on, can't we just check whether |x2/a2 + y2/b2| < 1?
   this.includes = function(x, y) {
-    // e.g. x is 140, y is 160:
-    // var d = dist(x, y, this.rx/2, 0);
-
     this.centerx = width/2 + Math.cos(this.a) * this.rx/2;
     this.centery = height/2 - Math.sin(this.a) * this.ry;
 
@@ -91,22 +88,14 @@ function Ellipse(rx, ry, a) {
       realAngle = (PI - angle);
     }
 
-    console.log(realAngle);
-    // push();
-    // translate(width/2, height/2);
-    // rotate(2 * PI - this.a);
-    // var center = {};
-    // center.x = this.rx/2;
-    // center.y = this.y;
-    // var a = center.x;
-    // var b = this.ry/2;
-    // if ((Math.pow(x - center.x, 2)/Math.pow(a, 2) + Math.pow(y - center.y, 2)/Math.pow(b, 2)) < 1) {
-    //   pop();
-    //   return true;
-    // } else {
-    //   pop();
-    //   return false;
-    // }
+    // not 100% sure why this works but it does:
+    var realerAngle = (realAngle + this.a + PI/2) % (2*PI);
+    // console.log(realerAngle);
+
+    var pointOnEllipseX = this.rx * Math.cos(realerAngle);
+    var pointOnEllipseY = this.ry * Math.sin(realerAngle);
+
+    console.log(pointOnEllipseX, pointOnEllipseY);
   };
 
   this.checkState = function() {
