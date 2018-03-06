@@ -1,26 +1,23 @@
 
 var e;
 var ellipses = [];
+var colors = ['tomato', 'skyblue', 'maroon', 'goldenrod', 'lilac'];
 
 function setup() {
   createCanvas(100, 100);
   background(100);
 
-  // push();
-  // translate(width/2, height/2);
   noStroke();
   fill('white');
-  e = new Ellipse(50/2, 0, 50, 5, 1);
+  // wait why will 50 work but 5 won't?? Because we were stretching wrong way.
+  e = new Ellipse(5/2, 0, 5, 5, 4);
   ellipses.push(e);
-  // ellipse(5, 0, 5);
-  // pop();
   console.log(e);
-  setInterval(progress, 1000);
+  setInterval(progress, 3000);
 }
 
 function progress() {
   ellipses.forEach(function(ell) {
-    // this.state ++;
     ell.grow();
   });
 }
@@ -28,9 +25,11 @@ function progress() {
 function draw() {
   background(100);
   // e.a += 0.02;
-  e.render();
+  // This *is* necessary:
+  ellipses.forEach(function(ell) {
+    ell.render();
+  });
   // e.grow();
-  // console.log(e);
 }
 
 function Ellipse(x, y, rx, ry, a) {
@@ -40,10 +39,13 @@ function Ellipse(x, y, rx, ry, a) {
   this.ry = ry;
   this.a = a;
   this.state = 0;
+  var ran = Math.floor(Math.random() * colors.length);
+  this.color = colors[ran];
 
   this.render = function() {
     translate(width/2, height/2);
     rotate(2 * PI - this.a);
+    fill(this.color);
     ellipse(this.rx / 2, this.y, this.rx, this.ry);
     rotate(- 2 * PI + this.a);
     translate(-width/2, -height/2);
@@ -55,17 +57,32 @@ function Ellipse(x, y, rx, ry, a) {
 
   };
 
+  // no hoisting!!!
+  this.spawn = function() {
+    // console.log('spawnin');
+    var angle = Math.random() * 2 * PI;
+    var ell = new Ellipse(5/2, 0, 5, 5, angle);
+    ellipses.push(ell);
+  };
+
   this.grow = function() {
     this.state ++;
-    this.rx *= 1.2;
-    this.ry *= 1.5;
+    // console.log(this.state);
+    // will only call this for first leaf, otherwise we'll get exponential growth:
+    if (this.state % 2 == 0) {
+      // console.log('ahoy');
+      this.spawn();
+    }
+    this.rx *= 1.5;
+    this.ry *= 1.2;
     translate(width/2, height/2);
     rotate(2 * PI - this.a);
-    console.log(this.rx, this.ry);
-    // OOOoh interesting, we don't even have to call it here:
+    // console.log(this.rx, this.ry);
+    // OOOoh interesting, we don't even have to call it here, which i guess we should have known from angle example:
     // ellipse(Math.cos(this.a) * this.rx, Math.sin(this.a * this.rx), this.rx, this.ry);
     rotate(- 2 * PI + this.a);
     translate(-width/2, -height/2);
   };
+
 
 }
