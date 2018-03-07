@@ -17,10 +17,11 @@ function setup() {
   fill('white');
   // wait why will 50 work but 5 won't?? Because we were stretching wrong way.
   // x doesn't matter btw:
-  e = new Ellipse(65, 35, 4);
+  // e = new Ellipse(65, 35, 4);
+  e = new Ellipse(25, 25, 4);
   ellipses.push(e);
   // console.log(e);
-  // setInterval(progress, 1000);
+  // setInterval(progress, 400);
 
 }
 
@@ -29,6 +30,8 @@ function progress() {
     ell.grow();
     // Prevent exponential growth:
     if (index == 0) {
+      console.log(ellipses.length);
+      // console.log(Math.PHI);
       ell.checkState();
     }
   });
@@ -36,7 +39,7 @@ function progress() {
 
 function mouseClicked() {
   // console.log(mouseX, mouseY);
-  e.includes(mouseX, mouseY);
+  console.log(e.includes(mouseX, mouseY));
 }
 
 function draw() {
@@ -51,8 +54,8 @@ function draw() {
   // e.grow();
 }
 
-
 // from stackoverflow, wow and it works!:
+// Oh except we'll need every string to be exactly 6 bits long:
 function dec2bin(dec){
     return (dec >>> 0).toString(2);
 }
@@ -68,12 +71,16 @@ function Plant(angsArray) {
       // num between 0 and 63:
       var a = ang.toFixed(1) * 10;
       var bin = dec2bin(a);
+
+      while (bin.length < 6) {
+        bin = '0' + bin;
+      }
+      // console.log("angle", a, "  bin", bin);
       genes.push(bin);
     });
 
     var dna = genes.join('');
     return dna;
-
   };
 
 }
@@ -101,12 +108,14 @@ function Ellipse(rx, ry, a) {
   this.render();
 
   // I was thinking the radial idea... But hang on, can't we just check whether |x2/a2 + y2/b2| < 1?
+  // WAIT! We already have everythign we need!!! just nee dto compare 2 distances.
   this.includes = function(x, y) {
     this.centerx = width/2 + Math.cos(this.a) * this.rx/2;
-    this.centery = height/2 - Math.sin(this.a) * this.ry;
+    this.centery = height/2 - Math.sin(this.a) * this.ry/2;
 
-    var d = dist(x, y, this.centerx, this.centery);
+    // var d = dist(x, y, this.centerx, this.centery);
 
+    var dis = dist(mouseX, mouseY, this.centerx, this.centery);
     var m = (mouseY - this.centery) / (mouseX - this.centerx);
     var angle = Math.atan(m);
     var realAngle;
@@ -127,9 +136,18 @@ function Ellipse(rx, ry, a) {
 
     var realX = pointOnEllipseX;
 
-    console.log(pointOnEllipseX, pointOnEllipseY);
+    push();
+    translate(this.centerx, this.centery);
+    var dista = dist(0, 0, pointOnEllipseX, pointOnEllipseY);
+    pop();
+
+    // console.log(pointOnEllipseX, pointOnEllipseY, dista);
+    // console.log(this.centerx, this.centery);
+    console.log(dis);
+    return 2 * dis < dista ? true : false;
   };
 
+  // Wait we'll want this in the Plant constructor, not Leaf:
   // This is pretty costly, but we'll only have to run it once for each individual plant, once it's reached maturity:
   this.getArea = function() {
     var vals = [];
@@ -149,6 +167,8 @@ function Ellipse(rx, ry, a) {
       }
     }
 
+    // Then we should be able to use .reduce to sum up all the 1s in the array of pixel-values.
+
   };
 
   this.checkState = function() {
@@ -160,7 +180,12 @@ function Ellipse(rx, ry, a) {
 
   // no hoisting!!!
   this.spawn = function() {
+    // a good test will be to see if we can generate this angle based on random DNA:
     var angle = Math.random() * 2 * PI;
+
+    // This is the "best" version, or at least the path Nature chooses:
+    // var angle = (nextAngle + 2.4) % (2 * PI);
+    // nextAngle = angle;
     var ell = new Ellipse(5, 5, angle);
     ellipses.push(ell);
   };
@@ -173,3 +198,5 @@ function Ellipse(rx, ry, a) {
 
 
 }
+
+var nextAngle = 2.4;
