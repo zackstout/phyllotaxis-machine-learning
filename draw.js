@@ -41,7 +41,7 @@ function progress() {
 
 function mouseClicked() {
   // console.log(mouseX, mouseY);
-  // console.log(e.includes(mouseX, mouseY));
+  console.log(e.includes(mouseX, mouseY));
 }
 
 function draw() {
@@ -60,6 +60,11 @@ function draw() {
 // Oh except we'll need every string to be exactly 6 bits long:
 function dec2bin(dec){
     return (dec >>> 0).toString(2);
+}
+
+// can take in a string or an integer:
+function bin2dec(bin) {
+  return parseInt(bin, 2);
 }
 
 var plant = new Plant([1, 2, 3, 4, 5, 5, 4, 3, 2]);
@@ -111,6 +116,8 @@ function Ellipse(rx, ry, a) {
 
   // I was thinking the radial idea... But hang on, can't we just check whether |x2/a2 + y2/b2| < 1?
   // WAIT! We already have everythign we need!!! just nee dto compare 2 distances.
+
+  // Ok it's working....but only for circles....:
   this.includes = function(x, y) {
     this.centerx = width/2 + Math.cos(this.a) * this.rx/2;
     this.centery = height/2 - Math.sin(this.a) * this.ry/2;
@@ -118,14 +125,24 @@ function Ellipse(rx, ry, a) {
     var dis = dist(x, y, this.centerx, this.centery);
     // var dis = dist(mouseX, mouseY, this.centerx, this.centery);
 
-    var m = (mouseY - this.centery) / (mouseX - this.centerx);
+    var m = (y - this.centery) / (x - this.centerx);
+
+    // var m = (mouseY - this.centery) / (mouseX - this.centerx);
     var angle = Math.atan(m);
     var realAngle;
-    if (mouseX > this.centerx) {
+
+    if (x > this.centerx) {
       realAngle = (2*PI - angle) % (2*PI);
     } else {
       realAngle = (PI - angle);
     }
+
+
+    // if (mouseX > this.centerx) {
+    //   realAngle = (2*PI - angle) % (2*PI);
+    // } else {
+    //   realAngle = (PI - angle);
+    // }
 
     // not 100% sure why this works but it does:
     var realerAngle = (realAngle + this.a + PI/2) % (2*PI);
@@ -203,6 +220,20 @@ function Ellipse(rx, ry, a) {
     this.state ++;
     this.rx *= 1.13;
     this.ry *= 1.1;
+  };
+
+  // takes in a 120-length string of bits, 20 angles of 6 bits each:
+  this.interpretDna = function(dna) {
+    var genes = [];
+    // console.log(dna);
+    while (dna.length > 0) {
+      var gene = dna.splice(0, 6);
+      var bin = gene.join('');
+      var dec = bin2dec(bin);
+      genes.push(dec);
+    }
+
+    console.log(genes);
   };
 
 
