@@ -39,7 +39,7 @@ function progress() {
 
 function mouseClicked() {
   // console.log(mouseX, mouseY);
-  console.log(e.includes(mouseX, mouseY));
+  // console.log(e.includes(mouseX, mouseY));
 }
 
 function draw() {
@@ -113,9 +113,9 @@ function Ellipse(rx, ry, a) {
     this.centerx = width/2 + Math.cos(this.a) * this.rx/2;
     this.centery = height/2 - Math.sin(this.a) * this.ry/2;
 
-    // var d = dist(x, y, this.centerx, this.centery);
+    var dis = dist(x, y, this.centerx, this.centery);
+    // var dis = dist(mouseX, mouseY, this.centerx, this.centery);
 
-    var dis = dist(mouseX, mouseY, this.centerx, this.centery);
     var m = (mouseY - this.centery) / (mouseX - this.centerx);
     var angle = Math.atan(m);
     var realAngle;
@@ -134,7 +134,7 @@ function Ellipse(rx, ry, a) {
     var pointOnEllipseX = this.rx * Math.cos(realerAngle);
     var pointOnEllipseY = this.ry * Math.sin(realerAngle);
 
-    var realX = pointOnEllipseX;
+    // var realX = pointOnEllipseX;
 
     push();
     translate(this.centerx, this.centery);
@@ -143,7 +143,7 @@ function Ellipse(rx, ry, a) {
 
     // console.log(pointOnEllipseX, pointOnEllipseY, dista);
     // console.log(this.centerx, this.centery);
-    console.log(dis);
+    // console.log(dis);
     return 2 * dis < dista ? true : false;
   };
 
@@ -167,6 +167,13 @@ function Ellipse(rx, ry, a) {
       }
     }
 
+    // console.log();
+    var area = vals.reduce(function(total, n) {
+      return total + n;
+    });
+
+    // All right, this is 12.5 * 12.5 * PI.... So I guess we're inputting the diameters???
+    console.log(area);
     // Then we should be able to use .reduce to sum up all the 1s in the array of pixel-values.
 
   };
