@@ -17,8 +17,10 @@ function setup() {
   fill('white');
   // wait why will 50 work but 5 won't?? Because we were stretching wrong way.
   // x doesn't matter btw:
-  // e = new Ellipse(65, 35, 4);
-  e = new Ellipse(25, 25, 4);
+  e = new Ellipse(65, 25, 4);
+
+  // this seems to be diameters, not radii:
+  // e = new Ellipse(25, 25, 4);
   ellipses.push(e);
   // console.log(e);
   // setInterval(progress, 400);
