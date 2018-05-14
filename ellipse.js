@@ -26,51 +26,51 @@ function Ellipse(rx, ry, a) {
 
   // Ok it's working....but only for circles....:
   this.includes = function(x, y) {
-    this.centerx = width/2 + Math.cos(this.a) * this.rx/2;
-    this.centery = height/2 - Math.sin(this.a) * this.ry/2;
-
-    var dis = dist(x, y, this.centerx, this.centery);
-    // var dis = dist(mouseX, mouseY, this.centerx, this.centery);
-
-    var m = (y - this.centery) / (x - this.centerx);
-
-    // var m = (mouseY - this.centery) / (mouseX - this.centerx);
-    var angle = Math.atan(m);
-    var realAngle;
-
-    if (x > this.centerx) {
-      realAngle = (2*PI - angle) % (2*PI);
-    } else {
-      realAngle = (PI - angle);
-    }
-
-
-    // if (mouseX > this.centerx) {
+    // this.centerx = width/2 + Math.cos(this.a) * this.rx/2;
+    // this.centery = height/2 - Math.sin(this.a) * this.ry/2;
+    //
+    // var dis = dist(x, y, this.centerx, this.centery);
+    // // var dis = dist(mouseX, mouseY, this.centerx, this.centery);
+    //
+    // var m = (y - this.centery) / (x - this.centerx);
+    //
+    // // var m = (mouseY - this.centery) / (mouseX - this.centerx);
+    // var angle = Math.atan(m);
+    // var realAngle;
+    //
+    // if (x > this.centerx) {
     //   realAngle = (2*PI - angle) % (2*PI);
     // } else {
     //   realAngle = (PI - angle);
     // }
-
-    // not 100% sure why this works but it does:
-    var realerAngle = (realAngle + this.a + PI/2) % (2*PI);
-    // console.log(realerAngle);
-
-    // These are relative to CEnter of Ellipse, orientation (X positive toward center of canvas);
-    // We're almost there..!
-    var pointOnEllipseX = this.rx * Math.cos(realerAngle);
-    var pointOnEllipseY = this.ry * Math.sin(realerAngle);
-
-    // var realX = pointOnEllipseX;
-
-    push();
-    translate(this.centerx, this.centery);
-    var dista = dist(0, 0, pointOnEllipseX, pointOnEllipseY);
-    pop();
-
-    // console.log(pointOnEllipseX, pointOnEllipseY, dista);
-    // console.log(this.centerx, this.centery);
-    // console.log(dis);
-    return 2 * dis < dista ? true : false;
+    //
+    //
+    // // if (mouseX > this.centerx) {
+    // //   realAngle = (2*PI - angle) % (2*PI);
+    // // } else {
+    // //   realAngle = (PI - angle);
+    // // }
+    //
+    // // not 100% sure why this works but it does:
+    // var realerAngle = (realAngle + this.a + PI/2) % (2*PI);
+    // // console.log(realerAngle);
+    //
+    // // These are relative to CEnter of Ellipse, orientation (X positive toward center of canvas);
+    // // We're almost there..!
+    // var pointOnEllipseX = this.rx * Math.cos(realerAngle);
+    // var pointOnEllipseY = this.ry * Math.sin(realerAngle);
+    //
+    // // var realX = pointOnEllipseX;
+    //
+    // push();
+    // translate(this.centerx, this.centery);
+    // var dista = dist(0, 0, pointOnEllipseX, pointOnEllipseY);
+    // pop();
+    //
+    // // console.log(pointOnEllipseX, pointOnEllipseY, dista);
+    // // console.log(this.centerx, this.centery);
+    // // console.log(dis);
+    // return 2 * dis < dista ? true : false;
   };
 
   // Wait we'll want this in the Plant constructor, not Leaf:
