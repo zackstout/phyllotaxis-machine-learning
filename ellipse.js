@@ -24,8 +24,6 @@ function Ellipse(rx, ry, a) {
 
   this.includes = function(x, y) {
 
-    console.log(this.ry);
-
     var slope = tan(this.a); // seen geometrically
 
     var maj_axis = this.rx/2;
@@ -55,6 +53,12 @@ function Ellipse(rx, ry, a) {
 
     // great, this is working:
     console.log(getDistance(clicked, f1), getDistance(clicked, f2));
+
+    var double_major = this.rx; // this is the distance to which we must compare our sum.
+
+    var sum_of_distances = getDistance(clicked, f1) + getDistance(clicked, f2);
+
+    return sum_of_distances < double_major;
   };
 
   // Wait we'll want this in the Plant constructor, not Leaf:
