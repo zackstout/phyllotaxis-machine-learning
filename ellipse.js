@@ -18,59 +18,43 @@ function Ellipse(rx, ry, a) {
     rotate(- 2 * PI + this.a);
     translate(-width/2, -height/2);
   };
+
   // Draw on creation:
   this.render();
 
-  // I was thinking the radial idea... But hang on, can't we just check whether |x2/a2 + y2/b2| < 1?
-  // WAIT! We already have everythign we need!!! just nee dto compare 2 distances.
-
-  // Ok it's working....but only for circles....:
   this.includes = function(x, y) {
-    // this.centerx = width/2 + Math.cos(this.a) * this.rx/2;
-    // this.centery = height/2 - Math.sin(this.a) * this.ry/2;
-    //
-    // var dis = dist(x, y, this.centerx, this.centery);
-    // // var dis = dist(mouseX, mouseY, this.centerx, this.centery);
-    //
-    // var m = (y - this.centery) / (x - this.centerx);
-    //
-    // // var m = (mouseY - this.centery) / (mouseX - this.centerx);
-    // var angle = Math.atan(m);
-    // var realAngle;
-    //
-    // if (x > this.centerx) {
-    //   realAngle = (2*PI - angle) % (2*PI);
-    // } else {
-    //   realAngle = (PI - angle);
-    // }
-    //
-    //
-    // // if (mouseX > this.centerx) {
-    // //   realAngle = (2*PI - angle) % (2*PI);
-    // // } else {
-    // //   realAngle = (PI - angle);
-    // // }
-    //
-    // // not 100% sure why this works but it does:
-    // var realerAngle = (realAngle + this.a + PI/2) % (2*PI);
-    // // console.log(realerAngle);
-    //
-    // // These are relative to CEnter of Ellipse, orientation (X positive toward center of canvas);
-    // // We're almost there..!
-    // var pointOnEllipseX = this.rx * Math.cos(realerAngle);
-    // var pointOnEllipseY = this.ry * Math.sin(realerAngle);
-    //
-    // // var realX = pointOnEllipseX;
-    //
-    // push();
-    // translate(this.centerx, this.centery);
-    // var dista = dist(0, 0, pointOnEllipseX, pointOnEllipseY);
-    // pop();
-    //
-    // // console.log(pointOnEllipseX, pointOnEllipseY, dista);
-    // // console.log(this.centerx, this.centery);
-    // // console.log(dis);
-    // return 2 * dis < dista ? true : false;
+
+    console.log(this.ry);
+
+    var slope = tan(this.a); // seen geometrically
+
+    var maj_axis = this.rx/2;
+    var min_axis = this.ry/2;
+    var focus_to_center = Math.pow(maj_axis * maj_axis - min_axis * min_axis, 0.5);
+    // for finding the pixel-locations of the 2 foci:
+    var edge_to_f1 = maj_axis - focus_to_center;
+    var edge_to_f2 = maj_axis + focus_to_center;
+
+    // this is right:
+    console.log(edge_to_f1, edge_to_f2);
+
+    var f1 = {
+      x: width/2 + cos(this.a) * edge_to_f1,
+      y: height/2 - sin(this.a) * edge_to_f1
+    };
+
+    var f2 = {
+      x: width/2 + cos(this.a) * edge_to_f2,
+      y: height/2 - sin(this.a) * edge_to_f2
+    };
+
+    var clicked = {
+      x: mouseX,
+      y: mouseY
+    };
+
+    // great, this is working:
+    console.log(getDistance(clicked, f1), getDistance(clicked, f2));
   };
 
   // Wait we'll want this in the Plant constructor, not Leaf:
@@ -101,47 +85,52 @@ function Ellipse(rx, ry, a) {
     // All right, this is 12.5 * 12.5 * PI.... So I guess we're inputting the diameters???
     console.log(area);
     // Then we should be able to use .reduce to sum up all the 1s in the array of pixel-values.
-
+    return area;
   };
 
-  this.checkState = function() {
-    // will only call this for first leaf, otherwise we'll get exponential growth:
-    if (this.state % 2 == 0) {
-      this.spawn();
-    }
-  };
 
-  // no hoisting!!!
-  this.spawn = function() {
-    // a good test will be to see if we can generate this angle based on random DNA:
-    var angle = Math.random() * 2 * PI;
+    // takes in a 120-length string of bits, 20 angles of 6 bits each:
+    this.interpretDna = function(dna) {
+      var genes = [];
+      // console.log(dna);
+      while (dna.length > 0) {
+        var gene = dna.splice(0, 6);
+        var bin = gene.join('');
+        var dec = bin2dec(bin);
+        genes.push(dec);
+      }
 
-    // This is the "best" version, or at least the path Nature chooses:
-    // var angle = (nextAngle + 2.4) % (2 * PI);
-    // nextAngle = angle;
-    var ell = new Ellipse(5, 5, angle);
-    ellipses.push(ell);
-  };
+      console.log(genes);
+    };
 
-  this.grow = function() {
-    this.state ++;
-    this.rx *= 1.13;
-    this.ry *= 1.1;
-  };
 
-  // takes in a 120-length string of bits, 20 angles of 6 bits each:
-  this.interpretDna = function(dna) {
-    var genes = [];
-    // console.log(dna);
-    while (dna.length > 0) {
-      var gene = dna.splice(0, 6);
-      var bin = gene.join('');
-      var dec = bin2dec(bin);
-      genes.push(dec);
-    }
+    this.checkState = function() {
+      // will only call this for first leaf, otherwise we'll get exponential growth:
+      if (this.state % 2 == 0) { // can change this value to alter growth speed.
+        this.spawn();
+      }
+    };
 
-    console.log(genes);
-  };
+    // no hoisting!!!
+    this.spawn = function() {
+      // a good test will be to see if we can generate this angle based on random DNA:
+      // var angle = Math.random() * 2 * PI;
+
+      // This is the "best" version, or at least the path Nature chooses:
+      nextAngle = (nextAngle + 2.4) % (2 * PI);
+      // nextAngle = angle;
+      var ell = new Ellipse(5, 5, nextAngle);
+      ellipses.push(ell);
+    };
+
+    this.grow = function() {
+      this.state ++;
+      this.rx *= 1.13;
+      this.ry *= 1.1;
+    };
+
+
 }
+
 
 var nextAngle = 2.4;

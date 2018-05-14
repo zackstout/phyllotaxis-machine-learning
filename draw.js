@@ -13,17 +13,14 @@ var plant = new Plant([1, 2, 3, 4, 5, 5, 4, 3, 2]);
 function setup() {
   createCanvas(300, 300);
   background(100);
-
   noStroke();
   fill('white');
-  // wait why will 50 work but 5 won't?? Because we were stretching wrong way.
-  // x doesn't matter btw:
+
   e = new Ellipse(65, 25, 4);
 
   // this seems to be diameters, not radii:
   // e = new Ellipse(25, 25, 4);
   ellipses.push(e);
-  // console.log(e);
   // setInterval(progress, 400);
 
 }
@@ -31,6 +28,7 @@ function setup() {
 function draw() {
   background(100);
   // e.a += 0.02;
+  // Center:
   ellipse(width/2, height/2, 5);
 
   // This *is* necessary:
@@ -46,29 +44,27 @@ function draw() {
 function progress() {
   ellipses.forEach(function(ell, index) {
     ell.grow();
-    // Prevent exponential growth:
+    // Prevent exponential growth (i.e. only let one leaf be a spawner at a time):
     if (index == 0) {
-      console.log(ellipses.length);
-      // console.log(Math.PHI);
       ell.checkState();
     }
   });
 }
 
 function mouseClicked() {
-  // console.log(mouseX, mouseY);
   console.log(e.includes(mouseX, mouseY));
 }
 
 // Oh it's really nice that we can use these functions in ellipse and plant, even though they're sourced in first. Hmm I wonder how it does that. Sets up some linkage between the two files when one sources the other in?
-
-// from stackoverflow, wow and it works!:
-// Oh except we'll need every string to be exactly 6 bits long:
 function dec2bin(dec){
-    return (dec >>> 0).toString(2);
+  var res = (dec >>> 0).toString(2);
+  while (res.length < 6) {
+    res = '0' + res;
+  }
+  return res;
 }
 
-// can take in a string or an integer:
-function bin2dec(bin) {
-  return parseInt(bin, 2);
-}
+// I wonder if this will prevent us from calling this from other file -- nope!
+const bin2dec = (bin) => parseInt(bin, 2);
+
+const getDistance = (a, b) => Math.pow((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y), 0.5);
