@@ -1,26 +1,31 @@
 
 // Grabbing most of this logic from Coding Train's series on the genetic algorithm:
-function Population(p, m, num) {
+function Population(m, num) {
   // Population will consist of plants, each of which is an array of 20 angles.
   this.population = [];
   this.generations = 0;
-  this.finished = false;
-  this.target = p;
+  // this.finished = false;
+  // this.target = p;
   this.mutationRate = m;
-  this.perfectScore = 1;
+  // this.perfectScore = 1;
   this.matingPool = [];
-  this.best = "";
+  // this.best = "";
 
   // Initialize first generation randomly:
   for (var i=0; i<num; i++) {
-    this.population[i] = new DNA(this.target.length);
+    var angs = [];
+    for (var j=0; j<20; j++) {
+      var ang = Math.random() * 2 * PI;
+      angs.push(ang);
+    }
+    this.population[i] = new Plant(angs);
   }
 
   this.calcFitness = function() {
     for (var i=0; i < this.population.length; i++) {
 
       // What? What is "target"?
-      this.population[i].calcFitness(target);
+      this.population[i].calcFitness();
       // this.population[i].calcFitness(this.target);
     }
   };

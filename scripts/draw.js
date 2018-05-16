@@ -10,6 +10,7 @@ var ellipses = [];
 var colors = ['tomato', 'skyblue', 'darkgreen', 'goldenrod', 'purple'];
 // var plant = new Plant([1, 2, 3, 4, 5, 5, 4, 3, 2]);
 var interval;
+var pop1;
 
 function setup() {
   createCanvas(300, 300);
@@ -17,38 +18,19 @@ function setup() {
   noStroke();
   fill('white');
 
-  // create
-  var angles = [];
+  pop1 = new Population(0.01, 100);
+  pop1.population.forEach(plant => {
+    console.log(plant.getDna());
+  });
 
-  for (var i=0; i < 20; i++) {
-    angles.push(Math.random() * 2 * PI);
-  }
-
-  // console.log(angles);
-
-  var p = new Plant(angles);
-
-  console.log(p.getDna());
-
-  // e = new Ellipse(65, 25, 4);
-
-  // this seems to be diameters, not radii:
-  e = new Leaf(1, 1, 4);
-  ellipses.push(e);
-  interval = setInterval(p.progress, 400);
 }
 
 function draw() {
   background(100);
-  // e.a += 0.02;
   // Center:
   ellipse(width/2, height/2, 5);
 
-  // This *is* necessary:
-  ellipses.forEach(function(ell) {
-    ell.render();
-  });
-  // e.grow();
+
 }
 
 
