@@ -1,7 +1,6 @@
 
 // Gotta break this down:
-// rename to Leaf
-function Ellipse(rx, ry, a) {
+function Leaf(rx, ry, a) {
   this.rx = rx;
   this.ry = ry;
   this.a = a;
@@ -105,7 +104,7 @@ function Ellipse(rx, ry, a) {
     // This is the "best" version, or at least the path Nature chooses:
     nextAngle = (nextAngle + 2.4) % (2 * PI);
     // nextAngle = angle;
-    var ell = new Ellipse(5, 5, nextAngle);
+    var ell = new Leaf(5, 5, nextAngle);
     ellipses.push(ell);
   };
 

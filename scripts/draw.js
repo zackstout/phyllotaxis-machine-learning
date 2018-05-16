@@ -8,7 +8,7 @@
 var e;
 var ellipses = [];
 var colors = ['tomato', 'skyblue', 'darkgreen', 'goldenrod', 'purple'];
-var plant = new Plant([1, 2, 3, 4, 5, 5, 4, 3, 2]);
+// var plant = new Plant([1, 2, 3, 4, 5, 5, 4, 3, 2]);
 var interval;
 
 function setup() {
@@ -24,7 +24,7 @@ function setup() {
     angles.push(Math.random() * 2 * PI);
   }
 
-  console.log(angles);
+  // console.log(angles);
 
   var p = new Plant(angles);
 
@@ -33,10 +33,9 @@ function setup() {
   // e = new Ellipse(65, 25, 4);
 
   // this seems to be diameters, not radii:
-  e = new Ellipse(25, 25, 4);
+  e = new Leaf(1, 1, 4);
   ellipses.push(e);
-  interval = setInterval(progress, 400);
-
+  interval = setInterval(p.progress, 400);
 }
 
 function draw() {
@@ -54,50 +53,12 @@ function draw() {
 
 
 
-
-function progress() {
-
-  if (ellipses.length < 18) {
-    ellipses.forEach(function(ell, index) {
-      ell.grow();
-      // Prevent exponential growth (i.e. only let one leaf be a spawner at a time):
-      if (index == 0) {
-        ell.checkState();
-      }
-    });
-  } else {
-    console.log( ellipses );
-    // Plant is fully constructed -- calculate its area:
-    var vals = [];
-
-    for (var i=0; i < width; i++) {
-      for (var j=0; j < height; j++) {
-        vals[i * width + j] = 0;
-        for (var k=0; k < ellipses.length; k++) {
-          if (ellipses[k].includes({x: i, y: j})) {
-            vals[i * width + j] = 1;
-            break;
-          }
-        }
-      }
-    }
-
-    var area = vals.reduce(function(total, n) {
-      return total + n;
-    });
-
-    console.log(area);
-    console.log(vals);
-    clearInterval(interval);
-  }
-
-}
-
-function mouseClicked() {
-  console.log(e.includes({x: mouseX, y: mouseY}));
-}
-
 // Oh it's really nice that we can use these functions in ellipse and plant, even though they're sourced in first. Hmm I wonder how it does that. Sets up some linkage between the two files when one sources the other in?
+
+const bin2dec = (bin) => parseInt(bin, 2);
+
+const getDistance = (a, b) => Math.pow((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y), 0.5);
+
 function dec2bin(dec){
   var res = (dec >>> 0).toString(2);
   while (res.length < 6) {
@@ -105,8 +66,3 @@ function dec2bin(dec){
   }
   return res;
 }
-
-// I wonder if this will prevent us from calling this from other file -- nope!
-const bin2dec = (bin) => parseInt(bin, 2);
-
-const getDistance = (a, b) => Math.pow((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y), 0.5);
