@@ -23,20 +23,14 @@ function Population(m, num) {
 
   this.calcFitness = function() {
     for (var i=0; i < this.population.length; i++) {
-
-      // What? What is "target"?
       this.population[i].calcFitness();
-      // this.population[i].calcFitness(this.target);
     }
   };
-  // ** Now I doubt whether this is needed: (needs test)
-  // this.calcFitness();
 
   this.naturalSelection = function() {
-    //clear:
     this.matingPool = [];
 
-    // find most fit individual's fitness:
+    // find generation's max fitness:
     var maxFitness = 0;
     for (var i=0; i<this.population.length; i++) {
       if (this.population[i].fitness > maxFitness) {
@@ -44,6 +38,7 @@ function Population(m, num) {
       }
     }
 
+    // normalize:
     for (var j=0; j<this.population.length; j++) {
       var fitness = map(this.population[j].fitness, 0, maxFitness, 0, 1);
       var n = floor(fitness * 100);
@@ -56,7 +51,7 @@ function Population(m, num) {
 
   };
 
-  //make a new generation:
+  // make a new generation:
   this.generate = function() {
     for (var i=0; i<this.population.length; i++) {
       var a = floor(random(this.matingPool.length));

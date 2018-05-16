@@ -4,6 +4,7 @@ function Leaf(rx, ry, a) {
   this.rx = rx;
   this.ry = ry;
   this.a = a;
+  console.log('angle', a);
   this.state = 0;
   var ran = Math.floor(Math.random() * colors.length);
   this.color = colors[ran];

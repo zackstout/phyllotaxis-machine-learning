@@ -19,9 +19,20 @@ function setup() {
   fill('white');
 
   pop1 = new Population(0.01, 100);
-  pop1.population.forEach(plant => {
-    console.log(plant.getDna());
-  });
+  // pop1.population.forEach(plant => {
+  //   console.log(plant.getDna());
+  // });
+  console.log(pop1);
+
+  pop1.calcFitness();
+
+  // Testing testing 1 2 3:
+  for (var i=0; i < 10; i++) {
+    // pop1.calcFitness(); // each plant calculates its own fitness.
+    // pop1.naturalSelection(); // creates a mating pool.
+    // pop1.generate(); // iterate through population, replacing each element with a child (calling crossover and mutate)
+    // pop1.evaluate();
+  }
 
 }
 
