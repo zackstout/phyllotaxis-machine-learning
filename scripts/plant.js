@@ -3,10 +3,10 @@ function Plant(angsArray) {
   var genes = [];
   this.dna = '';
   this.angles = angsArray;
-
   this.ellipses = [];
-
   this.fitness = 0;
+  this.state = 0;
+  this.count = 0;
 
   // Takes in string of binary, outputs array of angles:
   this.interpretDna = function(dna) {
@@ -17,7 +17,8 @@ function Plant(angsArray) {
       var dec = bin2dec(bin);
       genes.push(dec);
     }
-    console.log(genes);
+    // console.log(genes);
+    return genes; // yeah...was forgetting to return
   };
 
   // Takes in array of angles, outputs binary string:
@@ -26,7 +27,6 @@ function Plant(angsArray) {
       // num between 0 and 63:
       var a = ang.toFixed(1) * 10;
       var bin = dec2bin(a);
-      // console.log("angle", a, "  bin", bin);
       genes.push(bin);
     });
 
@@ -37,21 +37,17 @@ function Plant(angsArray) {
   this.getDna(); // get the dna on creation so other functions can use it
 
 
-  this.state = 0;
-  this.count = 0;
-
-  // smooshing together spawn, checkState and grow from Leaf:
+  // Generate a 20-leaf plant:
   this.makeLeaves = function() {
-
+    // Create first leaf:
     if (this.ellipses.length === 0) {
       var leaf = new Leaf(5, 5, 0);
       this.ellipses.push(leaf);
       this.prevAngle = 0;
       this.state++;
     } else {
+      // Every other step, spawn a new leaf:
       if (this.state % 2 === 0) {
-        //Spawn new leaf:
-        // console.log(prevAngle); // why undefined?! Reallllllly don't understand why adding "this." to prevAngle fixed it
         var newAngle = (this.prevAngle + this.angles[this.count]) % (2*PI);
         var nextLeaf = new Leaf(5, 5, newAngle);
         this.ellipses.push(nextLeaf);
@@ -63,21 +59,21 @@ function Plant(angsArray) {
       });
       this.state++;
     }
-    // console.log(this.ellipses, this.count, this.state, this.prevAngle);
   };
 
-
+  // Helper function for calculating plant's fitness:
   this.getArea = function() {
     var vals = [];
 
+    // Loop through every pixel:
     for (var i=0; i < width; i++) {
       for (var j=0; j < height; j++) {
         vals[i * width + j] = 0;
 
+        // Check whether any ellipse (leaf) includes that pixel:
         for (var k=0; k < this.ellipses.length; k++) {
           var ell = this.ellipses[k];
-
-          var point = {x: i, y: j}; // this was the issue.
+          var point = {x: i, y: j}; // this was the issue, had to wrap it in object.
           if (ell.includes(point)) {
             vals[i * width + j] = 1;
             break;
@@ -86,29 +82,28 @@ function Plant(angsArray) {
       }
     }
 
+    // Sum up all pixels that are included in some leaf to get plant's total surface area:
     var area = vals.reduce(function(total, n) {
       return total + n;
     });
 
-    console.log(area);
+    // console.log(area);
     return area;
   };
 
-
-  // Borrowing from Coding Train's genetic algorithm tutorial:
-
+  // Borrowing the skeleton from Coding Train's genetic algorithm tutorial:
   this.calcFitness = function() {
     // Give each plant 20 leaves based on angles (from DNA):
     while (this.ellipses.length < 20) {
       this.makeLeaves();
     }
 
-    this.ellipses.forEach( ell => ell.render() );
+    // Will have to come back to the rendering idea ... with way more canvases:
+    // this.ellipses.forEach( ell => ell.render() ); // Super helpful: lets us see that things are actually working.
 
-    this.getArea();
-
-
-
+    var area = this.getArea();
+    var percentCover = area / (width * height);
+    this.fitness = percentCover.toFixed(3);
   };
 
 

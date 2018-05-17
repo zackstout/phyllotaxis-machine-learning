@@ -18,19 +18,19 @@ function setup() {
   noStroke();
   fill('white');
 
-  pop1 = new Population(0.01, 1);
-  // pop1.population.forEach(plant => {
-  //   console.log(plant.getDna());
-  // });
+  pop1 = new Population(0.01, 15);
   console.log(pop1);
 
   pop1.calcFitness();
+  pop1.naturalSelection(); // Interesting that this creates a variable-length array...Makes sense, because each initial population is random.
+  pop1.generate();
+  // console.log(pop1.population2);
 
   // Testing testing 1 2 3:
   for (var i=0; i < 10; i++) {
-    // pop1.calcFitness(); // each plant calculates its own fitness.
-    // pop1.naturalSelection(); // creates a mating pool.
-    // pop1.generate(); // iterate through population, replacing each element with a child (calling crossover and mutate)
+    pop1.calcFitness(); // each plant calculates its own fitness.
+    pop1.naturalSelection(); // creates a mating pool.
+    pop1.generate(); // iterate through population, replacing each element with a child (calling crossover and mutate)
     // pop1.evaluate();
   }
 

@@ -1,26 +1,21 @@
 
-// Grabbing most of this logic from Coding Train's series on the genetic algorithm:
+// Grabbing the skeleton of this logic from Coding Train's series on the genetic algorithm:
 function Population(m, num) {
   // Population will consist of plants, each of which is an array of 20 angles.
   this.population = [];
   this.generations = 0;
-  // this.finished = false;
-  // this.target = p;
   this.mutationRate = m;
-  // this.perfectScore = 1;
   this.matingPool = [];
-  // this.best = "";
-
 
   // Initialize first generation randomly:
   for (var i=0; i<num; i++) {
     var angs = [];
     for (var j=0; j<20; j++) {
-      // var ang = Math.random() * 2 * PI;
-      // angs.push(ang);
+      var ang = Math.random() * 2 * PI;
+      angs.push(ang);
 
       // Testing PHI:
-      angs.push(2.4);
+      // angs.push(2.4);
     }
     this.population[i] = new Plant(angs);
   }
@@ -46,6 +41,7 @@ function Population(m, num) {
     // normalize:
     for (var j=0; j<this.population.length; j++) {
       var fitness = map(this.population[j].fitness, 0, maxFitness, 0, 1);
+      // console.log(fitness, this.population[j].fitness, maxFitness);
       var n = floor(fitness * 100);
 
       // put n of those into our array, to simulate probability distribution:
@@ -54,10 +50,12 @@ function Population(m, num) {
       }
     }
 
+    // console.log(this.matingPool, maxFitness);
   };
 
   // make a new generation:
   this.generate = function() {
+    // this.population2 = [];
     for (var i=0; i<this.population.length; i++) {
       var a = floor(random(this.matingPool.length));
       var b = floor(random(this.matingPool.length));
