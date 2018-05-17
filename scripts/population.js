@@ -11,15 +11,20 @@ function Population(m, num) {
   this.matingPool = [];
   // this.best = "";
 
+
   // Initialize first generation randomly:
   for (var i=0; i<num; i++) {
     var angs = [];
     for (var j=0; j<20; j++) {
-      var ang = Math.random() * 2 * PI;
-      angs.push(ang);
+      // var ang = Math.random() * 2 * PI;
+      // angs.push(ang);
+
+      // Testing PHI:
+      angs.push(2.4);
     }
     this.population[i] = new Plant(angs);
   }
+
 
   this.calcFitness = function() {
     for (var i=0; i < this.population.length; i++) {

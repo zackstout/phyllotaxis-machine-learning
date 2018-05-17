@@ -6,7 +6,6 @@ function Plant(angsArray) {
 
   this.ellipses = [];
 
-
   this.fitness = 0;
 
   // Takes in string of binary, outputs array of angles:
@@ -37,37 +36,6 @@ function Plant(angsArray) {
 
   this.getDna(); // get the dna on creation so other functions can use it
 
-  this.progress = function() {
-    if (this.ellipses.length < 20) {
-      this.ellipses.forEach(function(ell, index) {
-        ell.grow();
-        if (index == 0) { // Prevent exponential growth (i.e. only let one leaf be a spawner at a time)
-          ell.checkState();
-        }
-      });
-    } else {
-      // Plant is fully constructed -- calculate its area:
-      var vals = [];
-
-      for (var i=0; i < width; i++) {
-        for (var j=0; j < height; j++) {
-          vals[i * width + j] = 0;
-          for (var k=0; k < this.ellipses.length; k++) {
-            if (this.ellipses[k].includes({x: i, y: j})) {
-              vals[i * width + j] = 1;
-              break;
-            }
-          }
-        }
-      }
-
-      var area = vals.reduce(function(total, n) {
-        return total + n;
-      });
-
-      console.log(area);
-    }
-  };
 
   this.state = 0;
   this.count = 0;
@@ -102,19 +70,15 @@ function Plant(angsArray) {
   this.getArea = function() {
     var vals = [];
 
-    // console.log(this.ellipses);
-    // console.log(width, height);
     for (var i=0; i < width; i++) {
       for (var j=0; j < height; j++) {
         vals[i * width + j] = 0;
-        // is the linter warning meaningful? does it matter if we make this inner or outer?
+
         for (var k=0; k < this.ellipses.length; k++) {
           var ell = this.ellipses[k];
-          // console.log(ell);
 
           var point = {x: i, y: j}; // this was the issue.
           if (ell.includes(point)) {
-            // console.log('hi');
             vals[i * width + j] = 1;
             break;
           }
@@ -138,27 +102,13 @@ function Plant(angsArray) {
     while (this.ellipses.length < 20) {
       this.makeLeaves();
     }
-    // console.log(this.ellipses);
 
-    this.ellipses.forEach(ell => {
-      ell.render();
-    });
+    this.ellipses.forEach( ell => ell.render() );
 
     this.getArea();
 
 
 
-
-    // console.log();
-
-    // var score = 0;
-    // for (var i=0; i <this.genes.length; i++) {
-    //   if (this.genes[i] == target.charAt(i)) {
-    //     score++;
-    //   }
-    // }
-    // this.fitness = score / target.length;
-    // this.fitness = pow(this.fitness, 4);
   };
 
 
