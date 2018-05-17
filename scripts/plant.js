@@ -72,8 +72,8 @@ function Plant(angsArray) {
   this.state = 0;
   this.count = 0;
 
+  // smooshing together spawn, checkState and grow from Leaf:
   this.makeLeaves = function() {
-    // console.log(this.angles);
 
     if (this.ellipses.length === 0) {
       var leaf = new Leaf(5, 5, 0);
@@ -82,11 +82,9 @@ function Plant(angsArray) {
       this.state++;
     } else {
       if (this.state % 2 === 0) {
-        //spawn new leaf
-        // console.log(this.angles[count]);
+        //Spawn new leaf:
         // console.log(prevAngle); // why undefined?! Reallllllly don't understand why adding "this." to prevAngle fixed it
         var newAngle = (this.prevAngle + this.angles[this.count]) % (2*PI);
-        // console.log(newAngle);
         var nextLeaf = new Leaf(5, 5, newAngle);
         this.ellipses.push(nextLeaf);
         this.prevAngle = newAngle;
@@ -97,20 +95,60 @@ function Plant(angsArray) {
       });
       this.state++;
     }
+    // console.log(this.ellipses, this.count, this.state, this.prevAngle);
+  };
 
-    console.log(this.ellipses, this.count, this.state, this.prevAngle);
 
+  this.getArea = function() {
+    var vals = [];
+
+    // console.log(this.ellipses);
+    // console.log(width, height);
+    for (var i=0; i < width; i++) {
+      for (var j=0; j < height; j++) {
+        vals[i * width + j] = 0;
+        // is the linter warning meaningful? does it matter if we make this inner or outer?
+        for (var k=0; k < this.ellipses.length; k++) {
+          var ell = this.ellipses[k];
+          // console.log(ell);
+
+          var point = {x: i, y: j}; // this was the issue.
+          if (ell.includes(point)) {
+            // console.log('hi');
+            vals[i * width + j] = 1;
+            break;
+          }
+        }
+      }
+    }
+
+    var area = vals.reduce(function(total, n) {
+      return total + n;
+    });
+
+    console.log(area);
+    return area;
   };
 
 
   // Borrowing from Coding Train's genetic algorithm tutorial:
 
   this.calcFitness = function() {
-    // console.log(this.angles);
-    for (var i=0; i < 22; i++) {
-      // console.log(this.ellipses);
-      // this.progress();
+    // Give each plant 20 leaves based on angles (from DNA):
+    while (this.ellipses.length < 20) {
+      this.makeLeaves();
     }
+    // console.log(this.ellipses);
+
+    this.ellipses.forEach(ell => {
+      ell.render();
+    });
+
+    this.getArea();
+
+
+
+
     // console.log();
 
     // var score = 0;

@@ -4,12 +4,13 @@ function Leaf(rx, ry, a) {
   this.rx = rx;
   this.ry = ry;
   this.a = a;
-  console.log('angle', a);
+  // console.log('angle', a);
   this.state = 0;
   var ran = Math.floor(Math.random() * colors.length);
   this.color = colors[ran];
 
   this.render = function() {
+    console.log('render');
     translate(width/2, height/2);
     rotate(2 * PI - this.a);
     fill(this.color);
@@ -19,9 +20,10 @@ function Leaf(rx, ry, a) {
   };
 
   // Draw on creation:
-  this.render();
+  // this.render();
 
   this.includes = function(point) {
+    // console.log(point);
     // will need slope to find pixel-locations for 2 foci:
     var slope = tan(this.a); // seen geometrically
 

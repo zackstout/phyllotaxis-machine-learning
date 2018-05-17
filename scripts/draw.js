@@ -18,7 +18,7 @@ function setup() {
   noStroke();
   fill('white');
 
-  pop1 = new Population(0.01, 100);
+  pop1 = new Population(0.01, 1);
   // pop1.population.forEach(plant => {
   //   console.log(plant.getDna());
   // });
@@ -37,9 +37,9 @@ function setup() {
 }
 
 function draw() {
-  background(100);
+  // background(100);
   // Center:
-  ellipse(width/2, height/2, 5);
+  // ellipse(width/2, height/2, 5);
 
 
 }
