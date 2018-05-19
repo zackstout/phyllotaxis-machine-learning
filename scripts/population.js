@@ -70,6 +70,13 @@ function Population(m, num) {
   };
 
 
+
+
+
+
+
+
+
   this.getBest = function() {
     return this.best; // generated in this.evaluate:
   };

@@ -11,8 +11,9 @@ Biggest challenges so far: determining whether a pixel lies within a rotated ell
 - p5.js
 
 ## Next Steps:
-- [ ] Change angles so that they add to previous angle, not start from 0.
-- [ ] Generate starting population randomly (100 plants?).
-- [ ] Give each plant the ability to calculate its own area.
-- [ ] Write the fitness function (capping at ~70% coverage, which is golden ratio's result).
-- [ ] Copy pasta in the logic for selection, inheritance, mutation.
+- [x] Change angles so that they add to previous angle, not start from 0.
+- [x] Generate starting population randomly (100 plants?).
+- [x] Give each plant the ability to calculate its own area.
+- [x] Write the fitness function (capping at ~70% coverage, which is golden ratio's result).
+- [x] Copy pasta in the logic-skeleton for selection, inheritance, mutation.
+- [ ] Build a nice display (animating plants as the generations change?)
