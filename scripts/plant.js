@@ -42,7 +42,7 @@ function Plant(angsArray, plantNo, p) {
   this.makeLeaves = function() {
     // Create first leaf:
     if (this.ellipses.length === 0) {
-      var leaf = new Leaf(5, 5, 0, p);
+      var leaf = new Leaf(5, 5, 0, p, this.plantNo);
       this.ellipses.push(leaf);
       this.prevAngle = 0;
       this.state++;
@@ -50,7 +50,7 @@ function Plant(angsArray, plantNo, p) {
       // Every other step, spawn a new leaf:
       if (this.state % 2 === 0) {
         var newAngle = (this.prevAngle + this.angles[this.count]) % (2 * p.PI);
-        var nextLeaf = new Leaf(5, 5, newAngle, p);
+        var nextLeaf = new Leaf(5, 5, newAngle, p, this.plantNo);
         this.ellipses.push(nextLeaf);
         this.prevAngle = newAngle;
         this.count++;
@@ -64,35 +64,27 @@ function Plant(angsArray, plantNo, p) {
 
   // Helper function for calculating plant's fitness:
   this.getArea = function() {
-    // Seems like vals array is unnecessary, just do area ++ in the for loop.
-
-    var vals = [];
+    let area = 0;
 
     // Loop through every pixel:
-    for (var i=0; i < width; i++) {
-      for (var j=0; j < height; j++) {
-        vals[i * width + j] = 0;
-
+    for (var i=0; i < p.width; i++) {
+      for (var j=0; j < p.height; j++) {
         // Check whether any ellipse (leaf) includes that pixel:
         for (var k=0; k < this.ellipses.length; k++) {
           var ell = this.ellipses[k];
           var point = {x: i, y: j}; // this was the issue, had to wrap it in object.
           if (ell.includes(point)) {
-            vals[i * width + j] = 1;
+            area ++;
             break;
           }
         }
       }
     }
-    // Sum up all pixels that are included in some leaf to get plant's total surface area:
-    var area = vals.reduce(function(total, n) {
-      return total + n;
-    });
 
-    // console.log(area);
     return area;
   };
 
+  // NOTE: if we only do this ONCE, we see the 20-leafed plant we want.
   // Borrowing the skeleton from Coding Train's genetic algorithm tutorial:
   this.calcFitness = function() {
     // Give each plant 20 leaves based on angles (from DNA):
@@ -100,23 +92,31 @@ function Plant(angsArray, plantNo, p) {
       this.makeLeaves();
     }
 
-    console.log(this.plantNo);
-    // console.log(this.ellipses);
-    // Will have to come back to the rendering idea ... with way more canvases:
     this.ellipses.forEach( ell => ell.render() ); // Super helpful: lets us see that things are actually working.
 
     var area = this.getArea();
-    const possibleCovered = width * height;
-    // const possibleCovered = (width/3) * (height/5);
+    const possibleCovered = p.width * p.height;
     var percentCover = area / possibleCovered;
     this.fitness = percentCover.toFixed(3);
+
     console.log('fitness is....', this.fitness);
+
+    // Repeating from Leaf function so we can draw text with value
+    const DIM = 250;
+    const X_POS = this.plantNo % 3;
+    const Y_POS = p.floor(this.plantNo / 3);
+    const X_CTR = X_POS * DIM + DIM / 2;
+    const Y_CTR = Y_POS * DIM + DIM / 2;
+
+    p2.fill('black');
+    p2.text(this.fitness, X_CTR, Y_CTR + 100);
+
   };
 
 
   this.crossover = function(partner) {
     var childDna = [];
-    var midpoint = floor(random(this.dna.length));
+    var midpoint = p.floor(p.random(this.dna.length));
 
     for (var i=0; i<this.dna.length; i++) {
       if (i > midpoint) childDna[i] = this.dna[i];
@@ -128,9 +128,9 @@ function Plant(angsArray, plantNo, p) {
     return child;
   };
 
-  this.mutate = function(mutationRate) {
+  this.mutate = function(mutationRate, p) {
     for (var i=0; i < this.dna.length; i++) {
-      if (random(1) < mutationRate) {
+      if (p.random(1) < mutationRate) {
         this.dna[i] = this.dna[i] == '1' ? '0' : '1'; // swap 0 and 1
       }
     }

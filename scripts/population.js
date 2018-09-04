@@ -30,7 +30,7 @@ function Population(m, num, p) {
   this.naturalSelection = function() {
     this.matingPool = [];
 
-    // find generation's max fitness:
+    // Find generation's max fitness:
     var maxFitness = 0;
     for (var i=0; i<this.population.length; i++) {
       if (this.population[i].fitness > maxFitness) {
@@ -38,35 +38,31 @@ function Population(m, num, p) {
       }
     }
 
-    // normalize:
+    // Normalize:
     for (var j=0; j<this.population.length; j++) {
       var fitness = p.map(this.population[j].fitness, 0, maxFitness, 0, 1);
-      // console.log(fitness, this.population[j].fitness, maxFitness);
       var n = p.floor(fitness * 100);
 
-      // put n of those into our array, to simulate probability distribution:
+      // Put n of those into our array, to simulate probability distribution:
       for (var k=0; k < n; k++) {
         this.matingPool.push(this.population[j]);
       }
     }
-
     // console.log(this.matingPool, maxFitness);
   };
 
-  // make a new generation:
+  // Make a new generation:
   this.generate = function() {
-    // this.population2 = [];
     for (var i=0; i<this.population.length; i++) {
       var a = p.floor(p.random(this.matingPool.length));
       var b = p.floor(p.random(this.matingPool.length));
       var partnerA = this.matingPool[a];
       var partnerB = this.matingPool[b];
       var child = partnerA.crossover(partnerB);
-      child.mutate(this.mutationRate);
+      child.mutate(this.mutationRate, p); // How odd that we have to pass in p here... plant.mutate cannot see it?
       this.population[i] = child;
     }
     this.generations++;
-    // console.log(this.generations);
   };
 
 

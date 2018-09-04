@@ -7,6 +7,18 @@ We encode the angle-arrays phenotype as a string of bits, each substring of six 
 
 Biggest challenges so far: determining whether a pixel lies within a rotated ellipse.
 
+I can't remember: is it normalized so that Phi gives fitness 1.0?
+
+## Screenshot:
+Here are some sample "plants" seen from above:
+
+![screen shot 2018-09-04 at 6 26 43 pm](https://user-images.githubusercontent.com/29472568/45062769-1a5e1800-b070-11e8-942b-15ea1711c480.png)
+
+Here are a few shown with their fitness value:
+
+![screen shot 2018-09-04 at 6 34 13 pm](https://user-images.githubusercontent.com/29472568/45062981-2c8c8600-b071-11e8-8d88-999b57254bf2.png)
+
+
 ## Built With:
 - p5.js
 

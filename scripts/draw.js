@@ -12,8 +12,11 @@ var colors = ['tomato', 'skyblue', 'darkgreen', 'goldenrod', 'purple'];
 var interval;
 var pop1;
 
-new p5(topSketch, 'top');
+var p2; // Ahhhh this is all we needed, never needed to pass them around!
+
+// Order is important here:
 new p5(btmSketch, 'btm');
+new p5(topSketch, 'top');
 
 function topSketch(p) {
   p.setup = function() {
@@ -30,18 +33,19 @@ function topSketch(p) {
     pop1.naturalSelection(); // Interesting that this creates a variable-length array...Makes sense, because each initial population is random.
     pop1.generate();
 
-    console.log(pop1);
+    // console.log(pop1);
   };
 }
 
 function btmSketch(p) {
+  p2 = p;
   p.setup = function() {
     p.createCanvas(750, 1250);
     // createCanvas(750, 1250);
     p.background(100);
     p.noStroke();
     p.fill('white');
-    console.log('ahoyhoy from canvas 2');
+    // console.log('ahoyhoy from canvas 2', pop1);
   };
 }
 
