@@ -1,22 +1,25 @@
 
 // Gotta break this down:
-function Leaf(rx, ry, a) {
+function Leaf(rx, ry, a, p) {
   this.rx = rx;
   this.ry = ry;
   this.a = a;
   // console.log('angle', a);
-  this.state = 0;
+  this.state = 0; // What is this for?
   var ran = Math.floor(Math.random() * colors.length);
   this.color = colors[ran];
 
   this.render = function() {
+    // dude use push/pop instead:
     console.log('render');
-    translate(width/2, height/2);
-    rotate(2 * PI - this.a);
-    fill(this.color);
-    ellipse(this.rx / 2, 0, this.rx, this.ry);
-    rotate(- 2 * PI + this.a);
-    translate(-width/2, -height/2);
+    p.push();
+    p.translate(p.width/2, p.height/2);
+    p.rotate(2 * p.PI - this.a);
+    p.fill(this.color);
+    p.ellipse(this.rx / 2, 0, this.rx, this.ry);
+    // rotate(- 2 * PI + this.a);
+    // translate(-width/2, -height/2);
+    p.pop();
   };
 
   // Draw on creation:
@@ -25,7 +28,7 @@ function Leaf(rx, ry, a) {
   this.includes = function(point) {
     // console.log(point);
     // will need slope to find pixel-locations for 2 foci:
-    var slope = tan(this.a); // seen geometrically
+    var slope = p.tan(this.a); // seen geometrically
 
     var maj_axis = this.rx/2;
     var min_axis = this.ry/2;
@@ -35,12 +38,12 @@ function Leaf(rx, ry, a) {
     var edge_to_f2 = maj_axis + focus_to_center;
 
     var f1 = {
-      x: width/2 + cos(this.a) * edge_to_f1,
-      y: height/2 - sin(this.a) * edge_to_f1 // needs to be minus because of canvas's orientation
+      x: width/2 + p.cos(this.a) * edge_to_f1,
+      y: height/2 - p.sin(this.a) * edge_to_f1 // needs to be minus because of canvas's orientation
     };
     var f2 = {
-      x: width/2 + cos(this.a) * edge_to_f2,
-      y: height/2 - sin(this.a) * edge_to_f2
+      x: width/2 + p.cos(this.a) * edge_to_f2,
+      y: height/2 - p.sin(this.a) * edge_to_f2
     };
 
     var double_major = this.rx; // this is the distance to which we must compare our sum.

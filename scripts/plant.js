@@ -1,5 +1,5 @@
 
-function Plant(angsArray) {
+function Plant(angsArray, plantNo, p) {
   var genes = [];
   this.dna = '';
   this.angles = angsArray;
@@ -7,6 +7,7 @@ function Plant(angsArray) {
   this.fitness = 0;
   this.state = 0;
   this.count = 0;
+  this.plantNo = plantNo; // redundant, but will work i think
 
   // Takes in string of binary, outputs array of angles:
   this.interpretDna = function(dna) {
@@ -41,15 +42,15 @@ function Plant(angsArray) {
   this.makeLeaves = function() {
     // Create first leaf:
     if (this.ellipses.length === 0) {
-      var leaf = new Leaf(5, 5, 0);
+      var leaf = new Leaf(5, 5, 0, p);
       this.ellipses.push(leaf);
       this.prevAngle = 0;
       this.state++;
     } else {
       // Every other step, spawn a new leaf:
       if (this.state % 2 === 0) {
-        var newAngle = (this.prevAngle + this.angles[this.count]) % (2*PI);
-        var nextLeaf = new Leaf(5, 5, newAngle);
+        var newAngle = (this.prevAngle + this.angles[this.count]) % (2 * p.PI);
+        var nextLeaf = new Leaf(5, 5, newAngle, p);
         this.ellipses.push(nextLeaf);
         this.prevAngle = newAngle;
         this.count++;
@@ -63,6 +64,8 @@ function Plant(angsArray) {
 
   // Helper function for calculating plant's fitness:
   this.getArea = function() {
+    // Seems like vals array is unnecessary, just do area ++ in the for loop.
+
     var vals = [];
 
     // Loop through every pixel:
@@ -81,7 +84,6 @@ function Plant(angsArray) {
         }
       }
     }
-
     // Sum up all pixels that are included in some leaf to get plant's total surface area:
     var area = vals.reduce(function(total, n) {
       return total + n;
@@ -98,12 +100,17 @@ function Plant(angsArray) {
       this.makeLeaves();
     }
 
+    console.log(this.plantNo);
+    // console.log(this.ellipses);
     // Will have to come back to the rendering idea ... with way more canvases:
-    // this.ellipses.forEach( ell => ell.render() ); // Super helpful: lets us see that things are actually working.
+    this.ellipses.forEach( ell => ell.render() ); // Super helpful: lets us see that things are actually working.
 
     var area = this.getArea();
-    var percentCover = area / (width * height);
+    const possibleCovered = width * height;
+    // const possibleCovered = (width/3) * (height/5);
+    var percentCover = area / possibleCovered;
     this.fitness = percentCover.toFixed(3);
+    console.log('fitness is....', this.fitness);
   };
 
 

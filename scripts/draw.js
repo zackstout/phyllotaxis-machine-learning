@@ -12,37 +12,74 @@ var colors = ['tomato', 'skyblue', 'darkgreen', 'goldenrod', 'purple'];
 var interval;
 var pop1;
 
-function setup() {
-  createCanvas(300, 300);
-  background(100);
-  noStroke();
-  fill('white');
+new p5(topSketch, 'top');
+new p5(btmSketch, 'btm');
 
-  pop1 = new Population(0.01, 15);
-  console.log(pop1);
+function topSketch(p) {
+  p.setup = function() {
+    p.createCanvas(300, 300);
+    // createCanvas(750, 1250);
+    p.background(100);
+    p.noStroke();
+    p.fill('white');
 
-  pop1.calcFitness();
-  pop1.naturalSelection(); // Interesting that this creates a variable-length array...Makes sense, because each initial population is random.
-  pop1.generate();
-  // console.log(pop1.population2);
+    pop1 = new Population(0.01, 15, p); // Size of 15
+    console.log(pop1);
 
-  // Testing testing 1 2 3:
-  for (var i=0; i < 10; i++) {
-    pop1.calcFitness(); // each plant calculates its own fitness.
-    pop1.naturalSelection(); // creates a mating pool.
-    pop1.generate(); // iterate through population, replacing each element with a child (calling crossover and mutate)
-    // pop1.evaluate();
-  }
+    pop1.calcFitness();
+    pop1.naturalSelection(); // Interesting that this creates a variable-length array...Makes sense, because each initial population is random.
+    pop1.generate();
 
+    console.log(pop1);
+  };
 }
 
-function draw() {
-  // background(100);
-  // Center:
-  // ellipse(width/2, height/2, 5);
-
-
+function btmSketch(p) {
+  p.setup = function() {
+    p.createCanvas(750, 1250);
+    // createCanvas(750, 1250);
+    p.background(100);
+    p.noStroke();
+    p.fill('white');
+    console.log('ahoyhoy from canvas 2');
+  };
 }
+
+
+// function setup() {
+//   createCanvas(300, 300);
+//   // createCanvas(750, 1250);
+//   background(100);
+//   noStroke();
+//   fill('white');
+//
+//   pop1 = new Population(0.01, 15); // Size of 15
+//   console.log(pop1);
+//
+//   pop1.calcFitness();
+//   pop1.naturalSelection(); // Interesting that this creates a variable-length array...Makes sense, because each initial population is random.
+//   pop1.generate();
+//
+//   console.log(pop1);
+//   // console.log(pop1.population2);
+//
+//   // Testing testing 1 2 3:
+//   // for (var i=0; i < 10; i++) {
+//   //   pop1.calcFitness(); // each plant calculates its own fitness.
+//   //   pop1.naturalSelection(); // creates a mating pool.
+//   //   pop1.generate(); // iterate through population, replacing each element with a child (calling crossover and mutate)
+//   //   // pop1.evaluate();
+//   // }
+//
+// }
+//
+// function draw() {
+//   // background(100);
+//   // Center:
+//   // ellipse(width/2, height/2, 5);
+//
+//
+// }
 
 
 
