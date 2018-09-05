@@ -11,15 +11,16 @@ function Leaf(rx, ry, a, p, plantNo) {
   this.color = colors[ran];
 
   this.render = function() {
+    // console.log('renderin');
     const DIM = 250;
     const X_POS = this.plantNo % 3;
-    const Y_POS = p.floor(this.plantNo / 3);
+    const Y_POS = p2.floor(this.plantNo / 3);
     const X_CTR = X_POS * DIM + DIM / 2;
     const Y_CTR = Y_POS * DIM + DIM / 2;
 
     p2.push();
     p2.translate(X_CTR, Y_CTR);
-    p2.rotate(2 * p.PI - this.a);
+    p2.rotate(2 * p2.PI - this.a);
     p2.scale(0.35);
     p2.fill(this.color);
     p2.ellipse(this.rx / 2, 0, this.rx, this.ry);

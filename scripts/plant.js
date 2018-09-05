@@ -9,6 +9,7 @@ function Plant(angsArray, plantNo, p) {
   this.count = 0;
   this.plantNo = plantNo; // redundant, but will work i think
 
+  // ===========================================================================================
   // Takes in string of binary, outputs array of angles:
   this.interpretDna = function(dna) {
     var genes = [];
@@ -22,6 +23,7 @@ function Plant(angsArray, plantNo, p) {
     return genes; // yeah...was forgetting to return
   };
 
+  // ===========================================================================================
   // Takes in array of angles, outputs binary string:
   this.getDna = function() {
     angsArray.forEach(function(ang) {
@@ -37,7 +39,7 @@ function Plant(angsArray, plantNo, p) {
 
   this.getDna(); // get the dna on creation so other functions can use it
 
-
+  // ===========================================================================================
   // Generate a 20-leaf plant:
   this.makeLeaves = function() {
     // Create first leaf:
@@ -49,7 +51,7 @@ function Plant(angsArray, plantNo, p) {
     } else {
       // Every other step, spawn a new leaf:
       if (this.state % 2 === 0) {
-        var newAngle = (this.prevAngle + this.angles[this.count]) % (2 * p.PI);
+        var newAngle = (this.prevAngle + this.angles[this.count]) % (2 * p2.PI);
         var nextLeaf = new Leaf(5, 5, newAngle, p, this.plantNo);
         this.ellipses.push(nextLeaf);
         this.prevAngle = newAngle;
@@ -62,6 +64,7 @@ function Plant(angsArray, plantNo, p) {
     }
   };
 
+  // ===========================================================================================
   // Helper function for calculating plant's fitness:
   this.getArea = function() {
     let area = 0;
@@ -84,7 +87,7 @@ function Plant(angsArray, plantNo, p) {
     return area;
   };
 
-  // NOTE: if we only do this ONCE, we see the 20-leafed plant we want.
+  // ===========================================================================================
   // Borrowing the skeleton from Coding Train's genetic algorithm tutorial:
   this.calcFitness = function() {
     // Give each plant 20 leaves based on angles (from DNA):
@@ -99,8 +102,6 @@ function Plant(angsArray, plantNo, p) {
     var percentCover = area / possibleCovered;
     this.fitness = percentCover.toFixed(3);
 
-    console.log('fitness is....', this.fitness);
-
     // Repeating from Leaf function so we can draw text with value
     const DIM = 250;
     const X_POS = this.plantNo % 3;
@@ -110,10 +111,9 @@ function Plant(angsArray, plantNo, p) {
 
     p2.fill('black');
     p2.text(this.fitness, X_CTR, Y_CTR + 100);
-
   };
 
-
+  // ===========================================================================================
   this.crossover = function(partner) {
     var childDna = [];
     var midpoint = p.floor(p.random(this.dna.length));
@@ -124,10 +124,14 @@ function Plant(angsArray, plantNo, p) {
     }
 
     var childAngs = this.interpretDna(childDna);
-    var child = new Plant(childAngs);
+
+    // hiding down here!
+    var child = new Plant(childAngs, i, p);
+    // console.log('child is ...', child);
     return child;
   };
 
+  // ===========================================================================================
   this.mutate = function(mutationRate, p) {
     for (var i=0; i < this.dna.length; i++) {
       if (p.random(1) < mutationRate) {
@@ -135,5 +139,4 @@ function Plant(angsArray, plantNo, p) {
       }
     }
   };
-
 }

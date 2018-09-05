@@ -7,7 +7,7 @@ We encode the angle-arrays phenotype as a string of bits, each substring of six 
 
 Biggest challenges so far: determining whether a pixel lies within a rotated ellipse.
 
-I can't remember: is it normalized so that Phi gives fitness 1.0?
+I can't remember: is it normalized so that Phi gives fitness 1.0? (I say below that I did, but when we run it with golden angle we only get 0.84 fitness...)
 
 ## Screenshot:
 Here are some sample "plants" seen from above:
@@ -23,9 +23,8 @@ Here are a few shown with their fitness value:
 - p5.js
 
 ## Next Steps:
-- [x] Change angles so that they add to previous angle, not start from 0.
 - [x] Generate starting population randomly (100 plants?).
 - [x] Give each plant the ability to calculate its own area.
 - [x] Write the fitness function (capping at ~70% coverage, which is golden ratio's result).
-- [x] Copy pasta in the logic-skeleton for selection, inheritance, mutation.
-- [ ] Build a nice display (animating plants as the generations change?)
+- [x] Build a nice display (animating plants as the generations change?)
+- [ ] Also need to animate new generations, and changing average fitness over time -- the coup de grace!

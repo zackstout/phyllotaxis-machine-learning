@@ -20,23 +20,19 @@ function Population(m, num, p) {
     this.population[i] = new Plant(angs, i, p);
   }
 
-
+  // ===========================================================================================
   this.calcFitness = function() {
     for (var i=0; i < this.population.length; i++) {
       this.population[i].calcFitness();
     }
   };
 
+  // ===========================================================================================
+  // Mating pool becomes "huge" because we fill it out to simulate probability.
   this.naturalSelection = function() {
-    this.matingPool = [];
+    this.matingPool = []; 
 
-    // Find generation's max fitness:
-    var maxFitness = 0;
-    for (var i=0; i<this.population.length; i++) {
-      if (this.population[i].fitness > maxFitness) {
-        maxFitness = this.population[i].fitness;
-      }
-    }
+    var maxFitness = Math.max(...this.population.map(p => p.fitness));
 
     // Normalize:
     for (var j=0; j<this.population.length; j++) {
@@ -48,9 +44,9 @@ function Population(m, num, p) {
         this.matingPool.push(this.population[j]);
       }
     }
-    // console.log(this.matingPool, maxFitness);
   };
 
+  // ===========================================================================================
   // Make a new generation:
   this.generate = function() {
     for (var i=0; i<this.population.length; i++) {
@@ -72,6 +68,7 @@ function Population(m, num, p) {
 
 
 
+  // ===========================================================================================
 
   this.getBest = function() {
     return this.best; // generated in this.evaluate:
